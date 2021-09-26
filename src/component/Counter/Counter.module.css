@@ -1,13 +1,8 @@
 ul,
 li {
-  margin: 0 auto;
   list-style: none;
   padding: 0;
 }
 .boxButton {
   margin-bottom: 20px;
-}
-.box__result {
-  display: grid;
-  text-align: initial;
 }

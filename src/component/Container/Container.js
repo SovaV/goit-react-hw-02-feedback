@@ -1,0 +1,5 @@
+import с from './Container.module.css';
+
+export default function Container({ children }) {
+  return <div className={с.container}>{children}</div>;
+}

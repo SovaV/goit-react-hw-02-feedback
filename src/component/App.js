@@ -5,7 +5,7 @@ import Counter from './Counter/Counter';
 export default function App() {
   return (
     <>
-      <Counter />
+      <Counter title="Please leave feedback" />
     </>
   );
 }

@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Controls from './Controls';
 import p from './Counter.module.css';
+import Section from '../Section/Section';
+import Container from '../Container/Container';
 
-class Counter extends React.Component {
-  static defaultProps = {
-    totalValue: 0,
-    positiveFeedback: 100,
-  };
+class Counter extends Component {
   state = {
     good: 0,
     neutral: 0,
@@ -27,17 +25,42 @@ class Counter extends React.Component {
       bad: prevState.bad + 1,
     }));
   };
-  // countTotalFeedback = () => {
-  //   this.setState(prevState => ({
-  //     totalValue: prevState.good + prevState.neutral + prevState.bad,
-  //   }));
-  // };
+
+  countTotalFeedback = () => {
+    const sum = Object.values(this.state).reduce((a, b) => a + b, 0);
+    return sum;
+  };
+
+  countPositiveFeedbackPercentage = () => {
+    const percentage = Math.round((this.state.good / this.countTotalFeedback()) * 100);
+
+    return percentage;
+  };
   render() {
     return (
-      <div className={p.box}>
-        <p>Please leave feedback</p>
-        <Controls />
-      </div>
+      <Container>
+        <Section title="Please leave feedback">
+          <Controls
+            onIncrement={this.handleIncrementGood}
+            onDecrement={this.handleIncrementNeutral}
+            onInDecrement={this.handleIncrementBad}
+          />
+        </Section>
+        <h2 title="Statistics"> </h2>
+        <Section title="Statistics">
+          {this.countTotalFeedback() ? (
+            <ul className={p.box__result}>
+              <li>Good:{this.state.good}</li>
+              <li>Neutral:{this.state.neutral}</li>
+              <li>Bad:{this.state.bad}</li>
+              <li>Total:{this.countTotalFeedback()}</li>
+              <li>Positive feedback: {this.countPositiveFeedbackPercentage()}%</li>
+            </ul>
+          ) : (
+            <h3>No feedback given</h3>
+          )}
+        </Section>
+      </Container>
     );
   }
 }

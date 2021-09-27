@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Controls from './Controls';
-import p from './Counter.module.css';
 import Section from '../Section/Section';
 import Container from '../Container/Container';
+import Statistics from '../Statistics/Statistics';
+import Notification from '../Notification/Notification';
+import FeedbackOptions from '../Feedback/FeedbackOptions ';
 
 class Counter extends Component {
   state = {
@@ -10,19 +11,9 @@ class Counter extends Component {
     neutral: 0,
     bad: 0,
   };
-  handleIncrementGood = () => {
-    this.setState(prevState => ({
-      good: prevState.good + 1,
-    }));
-  };
-  handleIncrementNeutral = () => {
-    this.setState(prevState => ({
-      neutral: prevState.neutral + 1,
-    }));
-  };
-  handleIncrementBad = () => {
-    this.setState(prevState => ({
-      bad: prevState.bad + 1,
+  onLeaveFeedback = e => {
+    this.setState(state => ({
+      [e]: state[e] + 1,
     }));
   };
 
@@ -33,35 +24,37 @@ class Counter extends Component {
 
   countPositiveFeedbackPercentage = () => {
     const percentage = Math.round((this.state.good / this.countTotalFeedback()) * 100);
-
     return percentage;
   };
   render() {
+    const { good, neutral, bad } = this.state;
+    const obj = Object.keys(this.state);
+    const feedback = this.onLeaveFeedback;
+    const total = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
+
     return (
       <Container>
         <Section title="Please leave feedback">
-          <Controls
-            onIncrement={this.handleIncrementGood}
-            onDecrement={this.handleIncrementNeutral}
-            onInDecrement={this.handleIncrementBad}
-          />
+          <FeedbackOptions options={obj} onLeaveFeedback={feedback} />
         </Section>
         <h2 title="Statistics"> </h2>
         <Section title="Statistics">
-          {this.countTotalFeedback() ? (
-            <ul className={p.box__result}>
-              <li>Good:{this.state.good}</li>
-              <li>Neutral:{this.state.neutral}</li>
-              <li>Bad:{this.state.bad}</li>
-              <li>Total:{this.countTotalFeedback()}</li>
-              <li>Positive feedback: {this.countPositiveFeedbackPercentage()}%</li>
-            </ul>
+          {total > 0 ? (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              positivePercentage={positivePercentage}
+            />
           ) : (
-            <h3>No feedback given</h3>
+            <Notification title="No feedback given"></Notification>
           )}
         </Section>
       </Container>
     );
   }
 }
+
 export default Counter;

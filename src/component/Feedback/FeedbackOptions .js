@@ -1,13 +1,12 @@
 import f from './FeedbackOptions.module.css';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
 
 const FeedbackOptions = ({ options, onLeaveFeedback }) => {
   return (
     <>
       {options.map(option => (
         <button
-          key={shortid.generate()}
+          key={option}
           className={f.btn}
           type="button"
           onClick={() => onLeaveFeedback(option)}
